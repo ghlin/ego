@@ -1,0 +1,32 @@
+{
+  "name": "@ego/duel-host",
+  "typings": "dist/index.d.ts",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "description": "duel-host",
+  "scripts": {
+    "build": "npx tsc",
+    "prepublishOnly": "npx tsc"
+  },
+  "keywords": [
+    "ygopro",
+    "yu-gi-oh",
+    "ygopro-core",
+    "ygo"
+  ],
+  "author": "ghlin <2012.2.9.ghl@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@ego/engine-interface": "^0.0.0",
+    "@types/node": "^10.14.15",
+    "tslint": "^5.11.0",
+    "tslint-config-standard": "^8.0.1",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.7.0-beta"
+  },
+  "dependencies": {
+    "@ego/message-protocol": "^0.0.0",
+    "@ego/misc": "^0.0.0"
+  }
+}

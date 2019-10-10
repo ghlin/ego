@@ -1,0 +1,5 @@
+/build
+/.lvimrc
+/dist
+/.vscode
+/.ccls-cache

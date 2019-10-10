@@ -1,0 +1,10 @@
+clang++
+%cpp -std=c++17
+%h -x
+%h c++-header
+-stdlib=libstdc++
+-Wall
+-Wextra
+-I./node_modules/node-addon-api
+-I./node_modules/node-addon-api/src
+-DNAPI_DISABLE_CPP_EXCEPTIONS
