@@ -19,14 +19,14 @@
   "license": "MIT",
   "devDependencies": {
     "@ego/engine-interface": "^0.0.0",
-    "@types/node": "^10.14.15",
+    "@types/node": "^14.14.35",
     "tslint": "^5.11.0",
     "tslint-config-standard": "^8.0.1",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.7.0-beta"
+    "typescript": "^3.7.4"
   },
   "dependencies": {
-    "@ego/misc": "^0.0.0",
+    "@ego/common": "^0.0.0",
     "iconv-lite": "^0.5.0",
     "lzma": "^2.3.2",
     "mersennetwister": "^0.2.3",

@@ -1,4 +1,4 @@
-import { CardRecordWithText } from '@ego/engine-interface'
+import { CardRecordWithText } from '@ego/common'
 import * as sqlite from 'sqlite'
 
 const strs = [...new Array(16)].map((_, v) => `str${v + 1}`)

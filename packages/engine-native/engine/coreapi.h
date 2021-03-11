@@ -101,6 +101,10 @@ DEFINE_API_PROTOTYPE( script_reader
                     , byte *
                     , char const *, int *);
 
+DEFINE_API_PROTOTYPE( message_handler
+                    , uint32_t
+                    , void *, std::uint32_t);
+
 DEFINE_API_PROTOTYPE( card_reader
                     , std::uint32_t
                     , std::uint32_t, void *);
@@ -112,6 +116,10 @@ DEFINE_API_PROTOTYPE( set_script_reader
 DEFINE_API_PROTOTYPE( set_card_reader
                     , void
                     , card_reader_t);
+
+DEFINE_API_PROTOTYPE( set_message_handler
+                    , void
+                    , message_handler_t);
 
 #undef  DEFINE_API_PROTOTYPE
 }
@@ -149,6 +157,7 @@ DEFINE_API_SLOT(set_responseb);
 DEFINE_API_SLOT(preload_script);
 DEFINE_API_SLOT(set_card_reader);
 DEFINE_API_SLOT(set_script_reader);
+DEFINE_API_SLOT(set_message_handler);
 
 #undef  DEFINE_API_SLOT
 };

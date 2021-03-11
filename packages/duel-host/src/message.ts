@@ -28,4 +28,3 @@ export function isHostAwaitingResponse(message: HostMessage): message is HostDue
     && message.to.length === 1
     && isQuestionMessage(message.what)
 }
-

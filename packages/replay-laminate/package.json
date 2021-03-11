@@ -1,10 +1,10 @@
 {
-  "name": "@ego/replay-validator",
+  "name": "@ego/replay-laminate",
   "typings": "dist/index.d.ts",
   "version": "0.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "replay validator",
+  "description": "duel-host",
   "scripts": {
     "build": "npx tsc",
     "prepublishOnly": "npx tsc"
@@ -19,22 +19,20 @@
   "license": "MIT",
   "devDependencies": {
     "@ego/engine-interface": "^0.0.0",
-    "@types/fs-extra": "^8.0.0",
-    "@types/node": "^10.14.15",
-    "@types/yargs": "^13.0.3",
-    "tslint": "^5.11.0",
-    "tslint-config-standard": "^8.0.1",
-    "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.7.0-beta"
+    "@types/fs-extra": "^9.0.8",
+    "@types/iconv": "^2.1.16",
+    "@types/node": "^14.14.35",
+    "@types/yargs": "^16.0.0",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@ego/common": "^0.0.0",
     "@ego/data-loader": "^0.0.0",
     "@ego/duel-host": "^0.0.0",
     "@ego/engine-native": "^0.0.0",
     "@ego/message-protocol": "^0.0.0",
-    "@ego/misc": "^0.0.0",
-    "ansi-escapes": "^4.2.1",
-    "fs-extra": "^8.1.0",
-    "yargs": "^14.2.0"
+    "fs-extra": "^9.1.0",
+    "iconv": "^3.0.0",
+    "yargs": "^16.2.0"
   }
 }

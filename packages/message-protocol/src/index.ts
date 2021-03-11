@@ -1,4 +1,3 @@
-
 type Optional<T> = T | undefined;
 
 interface BufferLike {
@@ -416,17 +415,6 @@ export interface MsgSelectSum {
 
 export interface MsgSortCard {
   msgtype: 'MSG_SORT_CARD';
-  player: number;
-  selection: Array<{
-    code: number;
-    controller: number;
-    location: number;
-    sequence: number;
-  }>;
-}
-
-export interface MsgSortChain {
-  msgtype: 'MSG_SORT_CHAIN';
   player: number;
   selection: Array<{
     code: number;
@@ -997,7 +985,6 @@ export type Message = MsgRetry
                     | MsgSelectCounter
                     | MsgSelectSum
                     | MsgSortCard
-                    | MsgSortChain
                     | MsgConfirmDeckTop
                     | MsgConfirmExtratop
                     | MsgConfirmCards
@@ -1089,7 +1076,6 @@ export type MessageTag = 'MSG_RETRY'
                        | 'MSG_SELECT_COUNTER'
                        | 'MSG_SELECT_SUM'
                        | 'MSG_SORT_CARD'
-                       | 'MSG_SORT_CHAIN'
                        | 'MSG_CONFIRM_DECKTOP'
                        | 'MSG_CONFIRM_EXTRATOP'
                        | 'MSG_CONFIRM_CARDS'
@@ -1871,31 +1857,6 @@ function parseMsgSortCard(buffer: BufferReader): MsgSortCard {
   }
   result.msgtype = 'MSG_SORT_CARD';
   return result as MsgSortCard;
-}
-
-/**
- * parse bytes as MsgSortChain (MSG_SORT_CHAIN)
- */
-function parseMsgSortChain(buffer: BufferReader): MsgSortChain {
-  const result: any = { };
-  { /* reading result (MsgSortChain) */
-    result.player = buffer.nextU8();
-    const selection: any[] = [];
-    // tslint:disable-next-line:one-variable-per-declaration
-    for (let i = 0, n = buffer.nextU8(); i !== n; ++i) {
-      const selection1: any = { };
-      { /* reading selection1 (Selection) */
-        selection1.code = buffer.nextU32();
-        selection1.controller = buffer.nextU8();
-        selection1.location = buffer.nextU8();
-        selection1.sequence = buffer.nextU8();
-      }
-      selection.push(selection1)
-    }
-    result.selection = selection;
-  }
-  result.msgtype = 'MSG_SORT_CHAIN';
-  return result as MsgSortChain;
 }
 
 /**
@@ -3066,7 +3027,6 @@ function parseOneMessage(buffer: BufferReader): Message {
     case MSG.SELECT_COUNTER: return parseMsgSelectCounter(buffer);
     case MSG.SELECT_SUM: return parseMsgSelectSum(buffer);
     case MSG.SORT_CARD: return parseMsgSortCard(buffer);
-    case MSG.SORT_CHAIN: return parseMsgSortChain(buffer);
     case MSG.CONFIRM_DECKTOP: return parseMsgConfirmDeckTop(buffer);
     case MSG.CONFIRM_EXTRATOP: return parseMsgConfirmExtratop(buffer);
     case MSG.CONFIRM_CARDS: return parseMsgConfirmCards(buffer);
@@ -3371,7 +3331,6 @@ export const MSG = {
   SELECT_PLACE: 0x000000000012,
   SELECT_POSITION: 0x000000000013,
   SELECT_TRIBUTE: 0x000000000014,
-  SORT_CHAIN: 0x000000000015,
   SELECT_COUNTER: 0x000000000016,
   SELECT_SUM: 0x000000000017,
   SELECT_DISFIELD: 0x000000000018,
@@ -3460,6 +3419,7 @@ export const HINT = {
   CODE: 0x000000000008,
   NUMBER: 0x000000000009,
   CARD: 0x00000000000a,
+  ZONE: 0x00000000000b,
 }
 
 export const CHINT = {
@@ -3543,7 +3503,6 @@ export type Question = MsgSelectBattleCmd
                      | MsgSelectCounter
                      | MsgSelectSum
                      | MsgSortCard
-                     | MsgSortChain
                      | MsgRockPaperScissors
                      | MsgAnnounceRace
                      | MsgAnnounceAttrib
@@ -3569,7 +3528,6 @@ export type QuestionTag = 'MSG_SELECT_BATTLECMD'
                         | 'MSG_SELECT_COUNTER'
                         | 'MSG_SELECT_SUM'
                         | 'MSG_SORT_CARD'
-                        | 'MSG_SORT_CHAIN'
                         | 'MSG_ROCK_PAPER_SCISSORS'
                         | 'MSG_ANNOUNCE_RACE'
                         | 'MSG_ANNOUNCE_ATTRIB'
@@ -3592,7 +3550,6 @@ const questionTypes = [ 'MSG_SELECT_BATTLECMD'
                       , 'MSG_SELECT_COUNTER'
                       , 'MSG_SELECT_SUM'
                       , 'MSG_SORT_CARD'
-                      , 'MSG_SORT_CHAIN'
                       , 'MSG_ROCK_PAPER_SCISSORS'
                       , 'MSG_ANNOUNCE_RACE'
                       , 'MSG_ANNOUNCE_ATTRIB'

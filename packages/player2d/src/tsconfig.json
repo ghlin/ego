@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "target": "es6",
+    "lib": [
+      "dom",
+      "es6",
+      "dom.iterable",
+      "scripthost"
+    ],
+    "sourceMap": true,
+    "outDir": "dist"
+  },
+  "files": [ "index.ts", "typings.d.ts" ],
+  "exclude": [ "../dist" ]
+}

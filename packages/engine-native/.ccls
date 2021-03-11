@@ -5,6 +5,6 @@ clang++
 -stdlib=libstdc++
 -Wall
 -Wextra
--I./node_modules/node-addon-api
--I./node_modules/node-addon-api/src
+-I/home/ghlin/Documents/Projects/ego/node_modules/node-addon-api
+-I/home/ghlin/Documents/Projects/ego/node_modules/node-addon-api/src
 -DNAPI_DISABLE_CPP_EXCEPTIONS

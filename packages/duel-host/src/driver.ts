@@ -1,6 +1,6 @@
 import { CoreEngine } from '@ego/engine-interface'
 import { isQuestionMessage, LOCATION, Message, parseMessage, POS, Question } from '@ego/message-protocol'
-import { prettyBuffer } from '@ego/misc'
+import { prettyBuffer, dumpBuffer } from '@ego/common'
 import { HostMessage } from './message'
 import { replayInflate, replayStart } from './replay'
 
@@ -119,6 +119,9 @@ export class DuelState {
       response.buffer.slice(response.byteOffset, response.byteOffset + response.length))
 
     if (this.queue.peek().msgtype === 'MSG_RETRY') {
+      console.warn(`last_question = ${JSON.stringify(this.lastQuestion, undefined, 4)}`)
+      console.warn(`while response is:`)
+      dumpBuffer(response)
       return false
     }
 

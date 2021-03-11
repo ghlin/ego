@@ -1,5 +1,5 @@
 {
-  "name": "@ego/misc",
+  "name": "@ego/common",
   "typings": "dist/index.d.ts",
   "version": "0.0.0",
   "main": "dist/index.js",
@@ -18,13 +18,9 @@
   "author": "ghlin <2012.2.9.ghl@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^10.14.15",
-    "tslint": "^5.11.0",
-    "tslint-config-standard": "^8.0.1",
-    "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.7.0-beta"
+    "@types/node": "^14.14.35",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
-    "ansi-escapes": "^4.2.1"
   }
 }

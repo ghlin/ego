@@ -1,23 +1,4 @@
-export interface CardRecord {
-  code: number
-  alias: number
-  level: number
-  race: number
-  type: number
-  attack: number
-  defense: number
-  lscale: number
-  rscale: number
-  attribute: number
-  link_marker: number
-  setcode: string
-}
-
-export interface CardRecordWithText extends CardRecord {
-  name: string
-  description: string
-  texts: string[]
-}
+import { CardRecord } from '@ego/common'
 
 export interface DataStore {
   add(card: CardRecord): void
