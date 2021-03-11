@@ -1,14 +1,14 @@
 import { CoreEngine } from '@ego/engine-interface'
-import { isQuestionMessage, LOCATION, Message, parseMessage, Question, MSG } from '@ego/message-protocol'
+import { isQuestionMessage, LOCATION, Message, MSG, parseMessage, Question } from '@ego/message-protocol'
 import { flatten, prettyBuffer } from '@ego/misc'
 import { HostMessage } from './message'
 
 // const REFRESH_HAND_FLAGS = 0x781FFF
-const REFRESH_GRAVE_FLAGS = 0x181FFF
-const REFRESH_DECK_FLAGS = 0x181FFF
-const REFRESH_EXTRA_FLAGS = 0x181FFF
+const REFRESH_GRAVE_FLAGS  = 0x181FFF
+const REFRESH_DECK_FLAGS   = 0x181FFF
+const REFRESH_EXTRA_FLAGS  = 0x181FFF
 const REFRESH_SINGLE_FLAGS = 0xF81FFF
-const REFRESH_FLAGS = 0xF81FFF
+const REFRESH_FLAGS        = 0xF81FFF
 
 function wrap(what: Message): HostMessage {
   return { tag: 'HOST_DUEL_MESSAGE', to: [], what }
@@ -44,7 +44,7 @@ function handleQuestion(engine: CoreEngine, duel: number, q: Question): Message[
 }
 
 function handleMessage(engine: CoreEngine, duel: number, m: Message): Message[] {
-  const out: Message[][] = [[m]]
+  const messages = [[m]]
 
   switch (m.msgtype) {
   case 'MSG_TAG_SWAP':
@@ -58,19 +58,19 @@ function handleMessage(engine: CoreEngine, duel: number, m: Message): Message[] 
   case 'MSG_CHAIN_SOLVED':
   case 'MSG_CHAIN_END':
   case 'MSG_DAMAGE_STEP_START':
-    out.push(refreshReplay(engine, duel))
+    messages.push(refreshReplay(engine, duel))
     break
 
   case 'MSG_REVERSE_DECK':
-    out.push(refresh2(engine, duel, LOCATION.DECK, REFRESH_DECK_FLAGS))
+    messages.push(refresh2(engine, duel, LOCATION.DECK, REFRESH_DECK_FLAGS))
     break
 
   case 'MSG_SHUFFLE_DECK':
-    out.push(refresh1(engine, duel, m.player, LOCATION.DECK, REFRESH_DECK_FLAGS))
+    messages.push(refresh1(engine, duel, m.player, LOCATION.DECK, REFRESH_DECK_FLAGS))
     break
 
   case 'MSG_SWAP_GRAVE_DECK':
-    out.push(refresh1(engine, duel, m.player, LOCATION.GRAVE, REFRESH_GRAVE_FLAGS))
+    messages.push(refresh1(engine, duel, m.player, LOCATION.GRAVE, REFRESH_GRAVE_FLAGS))
     break
 
   case 'MSG_MOVE':
@@ -82,13 +82,13 @@ function handleMessage(engine: CoreEngine, duel: number, m: Message): Message[] 
       const pc = m.previous.controller
 
       if (cl && !(cl & LOCATION.OVERLAY) && (cl !== pl || cc !== pc)) {
-        out.push(refreshSingle(engine, duel, cc, cl, cs))
+        messages.push(refreshSingle(engine, duel, cc, cl, cs))
       }
     }
     break
   }
 
-  return flatten(out)
+  return flatten(messages)
 }
 
 interface RefreshParam {
@@ -125,9 +125,14 @@ function doRefreshSingle(engine: CoreEngine, duel: number, param: RefreshParam &
   }
 }
 
-function refreshSingle(engine: CoreEngine, duel: number,
-                       player: number, location: number, sequence: number,
-                       flags: number = REFRESH_SINGLE_FLAGS) {
+function refreshSingle(
+  engine: CoreEngine,
+  duel: number,
+  player: number,
+  location: number,
+  sequence: number,
+  flags: number = REFRESH_SINGLE_FLAGS
+) {
   return doRefreshSingle(engine, duel, { player, location, sequence, flags })
 }
 
@@ -138,7 +143,7 @@ function refresh1(engine: CoreEngine, duel: number, player: number, location: nu
 function refresh2(engine: CoreEngine, duel: number, location: number, flags: number = REFRESH_FLAGS) {
   return flatten([
     doRefresh(engine, duel, { player: 0, location, flags }),
-    doRefresh(engine, duel, { player: 0, location, flags })])
+    doRefresh(engine, duel, { player: 1, location, flags })])
 }
 
 function refreshReplay(engine: CoreEngine, duel: number, flags = REFRESH_FLAGS) {

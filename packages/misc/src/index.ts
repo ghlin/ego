@@ -9,21 +9,21 @@ export function echoln(message: string) {
 }
 
 export function prettyBuffer(buffer: Buffer, every: number = 4, width: number = 16) {
-  const lines: string[] = []
-  const line: string[] = []
+  const lines = [`buffer (${buffer.length}):`]
+  let line: string[] = []
 
   buffer.forEach((byte, offset) => {
     if (offset % width === 0) {
       line.push(offset.toString(16).padStart(4, ' ') + ' |')
     }
     if (offset % every === 0) {
-      line.push(offset.toString(16).padStart(2, '0'))
+      line.push(' ')
     }
     line.push(' ' + byte.toString(16).padStart(2, '0'))
 
     if ((offset + 1) % 16 === 0) {
       lines.push(line.join(''))
-      line.splice(0, line.length)
+      line = []
     }
   })
 

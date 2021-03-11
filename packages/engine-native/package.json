@@ -12,6 +12,7 @@
   "scripts": {
     "build": "npx tsc",
     "build-all": "npx tsc && npx node-gyp configure rebuild",
+    "build-addon:debug": "npx node-gyp configure rebuild --debug",
     "build-js": "npx tsc",
     "build-addon": "npx node-gyp configure rebuild",
     "prepublishOnly": "npx tsc && npx node-gyp configure rebuild"
