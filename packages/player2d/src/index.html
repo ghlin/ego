@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#00000">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>My Awesome Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body, #root {
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body, #root {
+      height: 100%;
+      width: 100%;
+    }
+
+    .container {
+      overflow: hidden;
+    }
+
+    .hide-scrollbar {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .disable-cursor {
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      margin: 0.2em;
+    }
+
+    #root {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      margin: 0;
+    }
+
+    .side {
+      max-width: 12em;
+      min-width: 12em;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: center;
+      align-items: space-between;
+    }
+
+    .nav button {
+      margin: 0.2em;
+    }
+
+    #list {
+      height: 100%;
+      overflow-y: scroll;
+      list-style: none;
+      padding: 0.2em;
+    }
+
+    li {
+      width:         100%;
+      overflow-x:    hidden;
+      white-space:   nowrap;
+      cursor:        default;
+      font-size:     0.8em;
+      margin:        0.3em;
+      border-bottom: 2px solid grey;
+    }
+
+    li:hover {
+      border-bottom: 2px solid black;
+      background-color: white;
+      left: 0;
+      top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root" class="container">
+    <div class="side">
+      <div class="nav">
+        <button id="prev-page">Prev</button>
+        <span id="pagination-info">#/#</span>
+        <button id="next-page">Next</button>
+      </div>
+
+      <ul id="list" class="hide-scrollbar">
+      </ul>
+    </div>
+    <canvas id="playground" class="disable-cursor hide-scrollbar">
+      No canvas for ya.
+    </canvas>
+  </div>
+
+  <script src="bundle.js">
+  </script>
+</body>
+</html>
