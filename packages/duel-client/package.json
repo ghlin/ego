@@ -1,10 +1,10 @@
 {
-  "name": "@ego/replay-laminate",
+  "name": "@ego/duel-client",
   "typings": "dist/index.d.ts",
   "version": "0.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "duel-host",
+  "description": "duel-client",
   "scripts": {
     "build": "npx tsc",
     "prepublishOnly": "npx tsc"
@@ -18,21 +18,11 @@
   "author": "ghlin <2012.2.9.ghl@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@ego/engine-interface": "^0.0.0",
-    "@types/fs-extra": "^9.0.8",
-    "@types/iconv": "^2.1.16",
     "@types/node": "^14.14.35",
-    "@types/yargs": "^16.0.0",
     "typescript": "^3.8.3"
   },
   "dependencies": {
     "@ego/common": "^0.0.0",
-    "@ego/data-loader": "^0.0.0",
-    "@ego/duel-host": "^0.0.0",
-    "@ego/engine-native": "^0.0.0",
-    "@ego/message-protocol": "^0.0.0",
-    "fs-extra": "^9.1.0",
-    "iconv": "^3.0.0",
-    "yargs": "^16.2.0"
+    "@ego/message-protocol": "^0.0.0"
   }
 }

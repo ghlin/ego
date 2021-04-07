@@ -1,6 +1,6 @@
 import { CoreEngine } from '@ego/engine-interface'
 import { isQuestionMessage, LOCATION, Message, MSG, parseMessage, Question } from '@ego/message-protocol'
-import { flatten, prettyBuffer } from '@ego/misc'
+import { flatten, prettyBuffer } from '@ego/common'
 import { HostMessage } from './message'
 
 // const REFRESH_HAND_FLAGS = 0x781FFF

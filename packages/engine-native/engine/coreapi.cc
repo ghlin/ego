@@ -20,6 +20,15 @@ void finalizer(void *, void *buffer)
 }
 
 static
+uint32_t handle_ocgcore_message(void *pduel, uint32_t message_type)
+{
+  char const *str_buffer = static_cast<char const *>(pduel);
+  std::fprintf(stderr, "%u - %s\n", message_type, str_buffer);
+
+  return 0;
+}
+
+static
 byte *read_script_from_current_engine( char const *script_name
                                      , int        *script_length);
 
@@ -68,10 +77,12 @@ bool initialize_core_api(CoreAPI *core_api, char const *path)
   SETUP_API_SLOT(preload_script);
   SETUP_API_SLOT(set_script_reader);
   SETUP_API_SLOT(set_card_reader);
+  SETUP_API_SLOT(set_message_handler);
 #undef  SETUP_API_SLOT
 
   core_api->set_script_reader(read_script_from_current_engine);
   core_api->set_card_reader(read_card_from_current_engine);
+  // core_api->set_message_handler(handle_ocgcore_message);
 
   return true;
 }
@@ -112,7 +123,7 @@ std::uint32_t read_card_from_current_engine(std::uint32_t code, void *data)
   auto data_store = g_current_engine->get_data_store();
   auto found      = data_store->records().find(code);
   if (found == data_store->records().end()) {
-    TRACEF("read_card: card %u not found", code);
+    // TRACEF("read_card: card %u not found", code);
     return 1;
   }
   *static_cast<Record *>(data) = found->second;
@@ -161,9 +172,9 @@ byte *read_script_from_current_engine( char const *script_name
   return dummy_script_content;
 }
 
-#define switch_engine()                \
-  do {                                 \
-    g_current_engine = this;           \
+#define switch_engine()      \
+  do {                       \
+    g_current_engine = this; \
   } while (false)
 
 using duel_instance_id_t = std::uint32_t;
@@ -466,7 +477,8 @@ Napi::Value CoreEngine::setResponse(Napi::CallbackInfo const &info)
   }
 
   byte response_buffer[64];
-  std::memcpy(response_buffer, arg1.Data(), 64);
+  std::memset(response_buffer, 0, sizeof response_buffer);
+  std::memcpy(response_buffer, arg1.Data(), arg1.ByteLength());
 
   switch_engine();
   api->set_responseb(duel, response_buffer);

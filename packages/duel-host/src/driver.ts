@@ -1,6 +1,6 @@
 import { CoreEngine } from '@ego/engine-interface'
 import { isQuestionMessage, LOCATION, Message, parseMessage, POS, Question } from '@ego/message-protocol'
-import { prettyBuffer, dumpBuffer } from '@ego/misc'
+import { prettyBuffer, dumpBuffer } from '@ego/common'
 import { HostMessage } from './message'
 import { replayInflate, replayStart } from './replay'
 

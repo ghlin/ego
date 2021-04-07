@@ -1,13 +1,30 @@
+import { CardRecordWithText } from '@ego/common'
 import { loadFromSqliteDB, parseReplay, ReplayReader } from '@ego/data-loader'
 import { DuelDriver, isHostAwaitingResponse } from '@ego/duel-host'
 import { CoreEngine } from '@ego/engine-interface'
 import { CoreEngine as Engine, DataStore, ScriptStore } from '@ego/engine-native'
 import { Message } from '@ego/message-protocol'
-import { echo, echoln } from '@ego/misc'
 import { lstat, readdir, readFile, writeFile } from 'fs-extra'
 import { join, parse } from 'path'
 import yargs from 'yargs'
 
+function extractCodelike(m: any, marks: Set<number>) {
+  function walk(o: any, key: string) {
+    if (Array.isArray(o)) {
+      for (const v of o) { walk(v, key) }
+    } else if (typeof o === 'number') {
+      if (key.includes('code') || key.includes('card')) {
+        marks.add(o)
+      }
+    } else if (typeof o === 'object') {
+      for (const k of Object.keys(o)) { walk(o[k], k) }
+    }
+  }
+
+  walk(m, '')
+}
+
+type Database = Record<number, CardRecordWithText>
 export function laminate(core: CoreEngine, data: Buffer) {
   const reader = new ReplayReader(parseReplay(data))
   const responses = reader.responses()
@@ -21,6 +38,7 @@ export function laminate(core: CoreEngine, data: Buffer) {
   })
 
   const messages: Message[] = []
+
   let next = 0
   try {
     retry:
@@ -50,7 +68,14 @@ export function laminate(core: CoreEngine, data: Buffer) {
     duel.release()
   }
 
-  return messages
+  const marks: Set<number> = new Set()
+  extractCodelike(messages, marks)
+  for (const p of reader.replay.players) {
+    extractCodelike({ cards: p.main }, marks)
+    extractCodelike({ cards: p.extra }, marks)
+  }
+
+  return { players: reader.replay.players, messages }
 }
 
 yargs.command(
@@ -65,22 +90,24 @@ yargs.command(
     .positional('replays', { alias: 'batch' }),
   async args => {
     // init engine.
-    echoln(`[init-engine] loading engine: ${args.engine}`)
+    console.log(`[init-engine] loading engine: ${args.engine}`)
     const engine = new Engine(args.engine)
 
     const dataStore = new DataStore()
+    const db: Database = {}
 
-    echoln(`[init-engine] opening database: ${args.database}`)
+    console.log(`[init-engine] opening database: ${args.database}`)
     const records = await loadFromSqliteDB(args.database)
     for (const record of records) {
       dataStore.add(record)
-      echo(`[init-engine] add data store: ${record.name}...`)
+      db[record.code] = record
+      console.log(`[init-engine] add data store: ${record.name}...`)
     }
-    echoln(`[init-engine] loaded ${records.length} records.`)
+    console.log(`[init-engine] loaded ${records.length} records.`)
 
     const scriptStore = new ScriptStore()
 
-    echoln(`[init-engine] loading scripts from: ${args.scripts}`)
+    console.log(`[init-engine] loading scripts from: ${args.scripts}`)
     const files = await readdir(args.scripts)
     for (const file of files) {
       const path = join(args.scripts, file)
@@ -90,7 +117,7 @@ yargs.command(
       scriptStore.add(file, content.toString())
     }
 
-    echoln(`[init-engine] loaded ${files.length} scripts.`)
+    console.log(`[init-engine] loaded ${files.length} scripts.`)
 
     engine.bindData(dataStore)
     engine.bindScript(scriptStore)
@@ -98,11 +125,11 @@ yargs.command(
     for (const replay of args.batch.concat(args._) as string[]) {
       const name = parse(replay).name
       const output = join(args.outdir, `${name}.laminated.json`)
-      echo(`[laminate] ${replay}...`)
+      console.log(`[laminate] ${replay}...`)
       try {
-        const messages = laminate(engine, await readFile(replay))
-        await writeFile(output, JSON.stringify(messages, undefined, 3))
-        echoln(`[laminate] ${replay} done.`)
+        const data = laminate(engine, await readFile(replay))
+        await writeFile(output, JSON.stringify(data, undefined, 0))
+        console.log(`[laminate] ${replay} done.`)
       } catch (e) {
         console.error(e)
       }

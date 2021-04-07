@@ -1,5 +1,7 @@
 import * as iconv from 'iconv-lite'
+// tslint:disable-next-line
 const { decompress } = require('lzma')
+// tslint:disable-next-line
 const MT = require('mersennetwister')
 
 export interface ReplayData {
@@ -65,13 +67,12 @@ function fromCompressed(props: number[], sizes: number[], data: Buffer) {
 }
 
 function translate(name: Buffer) {
-  const bytes = name.length
-  const nonzeros = new Int16Array(name.length)
-  for (let i = 0; i * 2 < bytes; ++i) {
-    nonzeros[i] = name.readInt16LE(i *  2)
+  let n = 0
+  while (n * 2 < name.length && name.readInt16LE(n * 2) !== 0) {
+    ++n
   }
 
-  return iconv.decode(Buffer.from(nonzeros.slice(0, bytes / 2)), 'utf-16')
+  return iconv.decode(name.slice(0, n * 2), 'utf-16')
 }
 
 export const REPLAY = {
@@ -108,9 +109,7 @@ function doReadReplay(reader: BufferReader): ReplayData {
     const extra = readDeck(bodyReader)
     return { main, extra }
   })
-  const players = names.map((name, i) => ({
-    name, ...decks[i]
-  }))
+  const players = names.map((name, i) => ({ name, ...decks[i] }))
   const responses = bodyReader.rest()
 
   return {
